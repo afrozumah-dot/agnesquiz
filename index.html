@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agnes Adjei Personal Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="decorations" aria-hidden="true">
+    <svg class="decoration decoration-glasses" viewBox="0 0 160 80">
+      <path d="M12 34h14l5-12h37l6 12h12l6-12h37l5 12h14M31 34c0 18 7 28 20 28s20-10 20-28M92 34c0 18 7 28 20 28s20-10 20-28M70 34h22" />
+    </svg>
+    <svg class="decoration decoration-eye" viewBox="0 0 120 80">
+      <path d="M8 40s19-27 52-27 52 27 52 27-19 27-52 27S8 40 8 40Z" />
+      <circle cx="60" cy="40" r="15" />
+      <circle class="pupil" cx="60" cy="40" r="5" />
+    </svg>
+  </div>
+  <main class="app">
+
+    <!-- Upload screen -->
+    <section id="screen-upload" class="screen active">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 22">
+            <path d="M2 11S7 2 16 2s14 9 14 9-5 9-14 9S2 11 2 11Z" />
+            <circle cx="16" cy="11" r="5.2" />
+            <circle class="brand-pupil" cx="16" cy="11" r="2.1" />
+          </svg>
+        </span>
+        Agnes Adjei Personal Quiz
+      </div>
+      <div class="chart" aria-hidden="true">
+        <span class="l1">E</span>
+        <span class="l2">F P</span>
+        <span class="l3">T O Z</span>
+        <span class="l4">L P E D</span>
+      </div>
+      <p class="eyebrow">Study smarter, one question at a time</p>
+      <h1>Turn your notes into a quiz.</h1>
+      <p class="sub">Upload PDF, DOCX, TXT, or image notes. Reader tools load online as needed; your file is processed in this browser, not uploaded.</p>
+
+      <div class="upload-tabs" role="tablist" aria-label="Choose note file type">
+        <button id="upload-tab-pdf" class="upload-tab active" type="button" role="tab" aria-selected="true" aria-controls="upload-panel" tabindex="0" data-format="pdf">PDF</button>
+        <button id="upload-tab-docx" class="upload-tab" type="button" role="tab" aria-selected="false" aria-controls="upload-panel" tabindex="-1" data-format="docx">DOCX</button>
+        <button id="upload-tab-txt" class="upload-tab" type="button" role="tab" aria-selected="false" aria-controls="upload-panel" tabindex="-1" data-format="txt">TXT</button>
+        <button id="upload-tab-image" class="upload-tab" type="button" role="tab" aria-selected="false" aria-controls="upload-panel" tabindex="-1" data-format="image">Images</button>
+      </div>
+
+      <div id="upload-panel" role="tabpanel" aria-labelledby="upload-tab-pdf">
+        <label id="dropzone" class="dropzone" for="pdf-input">
+          <input id="pdf-input" type="file" accept="application/pdf,.pdf" hidden>
+          <strong id="drop-title">Choose a PDF</strong>
+          <span id="drop-hint">or drag it here</span>
+        </label>
+      </div>
+
+      <div id="question-picker" class="question-picker">
+        <input id="q-count" type="hidden" value="10">
+        <button id="question-toggle" class="question-eye" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="question-options" aria-label="Choose number of questions">
+          <span class="question-eye-label">Questions <strong id="question-count-label">10</strong></span>
+          <span class="question-eye-iris" aria-hidden="true"></span>
+        </button>
+        <div id="question-options" class="question-options" role="listbox" aria-label="Number of questions">
+          <button class="question-option" type="button" role="option" aria-selected="false" data-count="5">5 questions</button>
+          <button class="question-option" type="button" role="option" aria-selected="true" data-count="10">10 questions</button>
+          <button class="question-option" type="button" role="option" aria-selected="false" data-count="15">15 questions</button>
+          <button class="question-option" type="button" role="option" aria-selected="false" data-count="20">20 questions</button>
+        </div>
+      </div>
+
+      <button id="btn-start" class="btn primary start-eye" disabled>
+        <span>Start quiz</span>
+        <span class="eye-pupil" aria-hidden="true"></span>
+      </button>
+      <p id="status" class="status" role="status"></p>
+    </section>
+
+    <!-- Quiz screen -->
+    <section id="screen-quiz" class="screen">
+      <div class="top">
+        <span id="progress-text">Question 1 of 10</span>
+        <button id="btn-quit" class="link">Quit</button>
+      </div>
+      <div class="bar"><div id="bar-fill"></div></div>
+      <h2 id="q-text" class="question"></h2>
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback" role="status"></div>
+      <a id="search-help" class="search-help" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">
+        <span aria-hidden="true">⌕</span> Not sure? Search this topic online
+      </a>
+      <button id="btn-next" class="btn primary" disabled>Next</button>
+    </section>
+
+    <!-- Result screen -->
+    <section id="screen-result" class="screen">
+      <p class="sub">Your score</p>
+      <div id="score" class="score">0/10</div>
+      <p id="score-msg" class="msg"></p>
+      <div class="actions">
+        <button id="btn-retry" class="btn primary">New random quiz</button>
+        <button id="btn-new" class="btn">Choose different notes</button>
+      </div>
+      <h3>Review</h3>
+      <ol id="review" class="review"></ol>
+    </section>
+
+    <footer class="app-footer">
+      <p>© 2026 Agnes Adjei Personal Quiz</p>
+      <p>Created by Azumah</p>
+    </footer>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
