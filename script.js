@@ -1,3 +1,48 @@
+/* ---------- Theme ---------- */
+const themeSelects = [...document.querySelectorAll(".theme-select")];
+const themeColor = document.querySelector('meta[name="theme-color"]');
+const themeStorageKey = "agnes-quiz-theme";
+let themePreference = "system";
+
+try {
+  const savedTheme = localStorage.getItem(themeStorageKey);
+  if (["system", "light", "dark"].includes(savedTheme)) themePreference = savedTheme;
+} catch (error) {
+  console.warn("Unable to read the saved theme preference.", error);
+}
+
+function applyTheme(preference, persist = false) {
+  themePreference = preference;
+  const isDark = preference === "dark" ||
+    (preference === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.dataset.theme = isDark ? "dark" : "light";
+  if (themeColor) themeColor.content = isDark ? "#090a0b" : "#f8f7fb";
+  themeSelects.forEach((select) => { select.value = preference; });
+
+  if (persist) {
+    try {
+      localStorage.setItem(themeStorageKey, preference);
+    } catch (error) {
+      console.warn("Unable to save the theme preference.", error);
+    }
+  }
+}
+
+themeSelects.forEach((select) => {
+  select.addEventListener("change", () => applyTheme(select.value, true));
+});
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+if (systemTheme.addEventListener) {
+  systemTheme.addEventListener("change", () => {
+    if (themePreference === "system") applyTheme("system");
+  });
+} else {
+  systemTheme.addListener(() => {
+    if (themePreference === "system") applyTheme("system");
+  });
+}
+applyTheme(themePreference);
+
 /* ---------- PDF.js setup (worker loaded via blob so it also works from file://) ---------- */
 const WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(
